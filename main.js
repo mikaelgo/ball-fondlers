@@ -4,11 +4,20 @@ var mainState = function(game){
 mainState.prototype = {
     
     preload() {
-        game.load.image('football', 'assets/football.png');
+        //game.load.image('football', 'assets/football.png');
     },
     
     
     create() {
+        
+        var style = { 
+            font: "60px VT323", 
+            fill: "#ffffff" 
+        };
+        
+        this.football = {};
+        
+        this.labelScore = game.add.text(20, 20, "0", style);
         
         this.ballsMissed = 0;
         this.ballSpeed = -200;
@@ -22,14 +31,19 @@ mainState.prototype = {
         this.footballs = game.add.group();
         //bind function addOneFootball to the scope of this prototype (=same as class)
         //so that we can reference the game properties inside the function
-        this.addOneFootball = this.addOneFootball.bind(this)
-        this.destroyFootball = this.destroyFootball.bind(this)
+        this.addOneFootball = this.addOneFootball.bind(this);
+        this.destroyFootball = this.destroyFootball.bind(this);
+        this.gameOver = this.gameOver.bind(this);
         
         this.timer = game.time.events.loop(1500,
             this.addOneFootball, this);    
     },
     
     update() {
+// UNCOMMENT THESE TO SEE THE PROBLEM!!!      
+//       if(this.football.x < 0) 
+//            console.log("Game over");
+//           this.gameOver();
        
     },
 
@@ -41,26 +55,31 @@ mainState.prototype = {
         console.log("this " , this)
 
         var randomY = Math.floor(Math.random() * y) + 1;
-        var football = game.add.sprite(x, randomY, 'football');
+        this.football = game.add.sprite(x, randomY, 'football');
         
-        this.footballs.add(football);
+        this.footballs.add(this.football);
         
-        game.physics.arcade.enable(football);
-        football.body.velocity.x = this.ballSpeed;
-        football.checkWorldBounds = true;
-        football.outOfBoundsKill = true;
+        game.physics.arcade.enable(this.football);
+        this.football.body.velocity.x = this.ballSpeed;
+        this.football.checkWorldBounds = true;
+        this.football.outOfBoundsKill = true;
         
-        football.inputEnabled = true;
-        football.events.onInputDown.add(this.destroyFootball, football);
+        this.football.inputEnabled = true;
+        this.football.events.onInputDown.add(this.destroyFootball, this.football);
     },
     
     destroyFootball(footballToBeDestroyed) {
         //on every destroy player wil get one point
         this.score ++;
+        this.labelScore.text = this.score;
         this.ballSpeed -= 10;
         this.timer.delay -= 20;
         console.log("destroying this football " , footballToBeDestroyed, this.score)
         footballToBeDestroyed.destroy();
         
+    },
+    
+    gameOver() {
+        game.state.start('main');
     }
 };

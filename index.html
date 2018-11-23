@@ -2,13 +2,14 @@
 <html>
     <head>  
         <meta charset="utf-8" />
-        <title> Peli2 </title>
+        <title> Ball Fondlers </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
 	     <meta name="apple-mobile-web-app-capable" content="yes" />
 	     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	     <meta name="HandheldFriendly" content="true" />
         <script type="text/javascript" src="phaser.min.js"></script>
         <script type="text/javascript" src="main.js"></script>
+        <script type="text/javascript" src="preload.js"></script>
         <script type="text/javascript">
         
      
@@ -27,9 +28,10 @@
         };
         
         var game = new Phaser.Game(config);
-        var stateReference = game.state.add('main', mainState);
+        game.state.add('preload', preloadState);
+        game.state.add('main', mainState);
             
-        game.state.start('main');
+        game.state.start('preload');
         
     </script>
     </head>
