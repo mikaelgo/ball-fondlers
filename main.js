@@ -15,7 +15,7 @@ mainState.prototype = {
             fill: "#ffffff" 
         };
         
-        this.football = {};
+        //this.football = {};
         
         this.labelScore = game.add.text(20, 20, "0", style);
         
@@ -36,7 +36,9 @@ mainState.prototype = {
         this.gameOver = this.gameOver.bind(this);
         
         this.timer = game.time.events.loop(1500,
-            this.addOneFootball, this);    
+            this.addOneFootball, this);
+        
+//        this.football.events.onOutOfBounds.add(footbalIsOut, this);
     },
     
     update() {
@@ -55,17 +57,18 @@ mainState.prototype = {
         console.log("this " , this)
 
         var randomY = Math.floor(Math.random() * y) + 1;
-        this.football = game.add.sprite(x, randomY, 'football');
+        var football = game.add.sprite(x, randomY, 'football');
         
-        this.footballs.add(this.football);
+        this.footballs.add(football);
         
-        game.physics.arcade.enable(this.football);
-        this.football.body.velocity.x = this.ballSpeed;
-        this.football.checkWorldBounds = true;
-        this.football.outOfBoundsKill = true;
+        game.physics.arcade.enable(football);
+        football.body.velocity.x = this.ballSpeed;
+        football.checkWorldBounds = true;
+        //this.football.outOfBoundsKill = true;
+        football.events.onOutOfBounds.add(this.footballIsOut, this);
         
-        this.football.inputEnabled = true;
-        this.football.events.onInputDown.add(this.destroyFootball, this.football);
+        football.inputEnabled = true;
+        football.events.onInputDown.add(this.destroyFootball, football);
     },
     
     destroyFootball(footballToBeDestroyed) {
@@ -77,6 +80,10 @@ mainState.prototype = {
         console.log("destroying this football " , footballToBeDestroyed, this.score)
         footballToBeDestroyed.destroy();
         
+    },
+    
+    footballIsOut(football) {
+        this.gameOver();
     },
     
     gameOver() {
