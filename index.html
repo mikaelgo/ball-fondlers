@@ -10,6 +10,8 @@
         <script type="text/javascript" src="phaser.min.js"></script>
         <script type="text/javascript" src="main.js"></script>
         <script type="text/javascript" src="preload.js"></script>
+        <script type="text/javascript" src="gameTitle.js"></script>
+        <script type="text/javascript" src="gameOver.js"></script>
         <script type="text/javascript">
         
      
@@ -26,10 +28,14 @@
                 }
             }
         };
+            
+        this.score;
         
         var game = new Phaser.Game(config);
         game.state.add('preload', preloadState);
+        game.state.add('gameTitle', gameTitleState);
         game.state.add('main', mainState);
+        game.state.add('gameOver', gameOverState);
             
         game.state.start('preload');
         

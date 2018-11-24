@@ -3,11 +3,6 @@ var mainState = function(game){
 
 mainState.prototype = {
     
-    preload() {
-        //game.load.image('football', 'assets/football.png');
-    },
-    
-    
     create() {
         
         var style = { 
@@ -15,11 +10,8 @@ mainState.prototype = {
             fill: "#ffffff" 
         };
         
-        //this.football = {};
-        
         this.labelScore = game.add.text(20, 20, "0", style);
         
-        this.ballsMissed = 0;
         this.ballSpeed = -200;
         this.score = 0;
         
@@ -33,19 +25,15 @@ mainState.prototype = {
         //so that we can reference the game properties inside the function
         this.addOneFootball = this.addOneFootball.bind(this);
         this.destroyFootball = this.destroyFootball.bind(this);
+        this.footballIsOut = this.footballIsOut.bind(this);
         this.gameOver = this.gameOver.bind(this);
         
         this.timer = game.time.events.loop(1500,
             this.addOneFootball, this);
         
-//        this.football.events.onOutOfBounds.add(footbalIsOut, this);
     },
     
     update() {
-// UNCOMMENT THESE TO SEE THE PROBLEM!!!      
-//       if(this.football.x < 0) 
-//            console.log("Game over");
-//           this.gameOver();
        
     },
 
@@ -64,7 +52,6 @@ mainState.prototype = {
         game.physics.arcade.enable(football);
         football.body.velocity.x = this.ballSpeed;
         football.checkWorldBounds = true;
-        //this.football.outOfBoundsKill = true;
         football.events.onOutOfBounds.add(this.footballIsOut, this);
         
         football.inputEnabled = true;
@@ -87,6 +74,6 @@ mainState.prototype = {
     },
     
     gameOver() {
-        game.state.start('main');
+        game.state.start('gameOver');
     }
 };
